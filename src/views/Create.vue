@@ -1,5 +1,6 @@
 <template>
   <div class="create">
+    <h1>Create a Post</h1>
     <form @submit.prevent="handleSubmit">
       <label>Title:</label>
       <input v-model="title" type="text" required />
@@ -18,6 +19,7 @@
 
 <script>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 export default {
   setup() {
@@ -28,8 +30,10 @@ export default {
 
     const uri = "http://localhost:3000/posts";
 
+    const router = useRouter();
+
     const handleAddTag = () => {
-      if (!tags.value.includes(tag.value)) {
+      if (!tags.value.includes(tag.value) && tag.value !== "") {
         tag.value = tag.value.replace(/ /g, "");
         tags.value.push(tag.value);
       }
@@ -48,6 +52,8 @@ export default {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(post),
       });
+
+      router.push({ name: "home" });
     };
 
     return {
